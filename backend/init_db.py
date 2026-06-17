@@ -152,6 +152,58 @@ def create_database():
         """)
         print("✓ Tabla 'estadisticas' creada")
         
+        # Crear tabla camas
+        cursor.execute("""
+            CREATE TABLE IF NOT EXISTS camas (
+                id INT AUTO_INCREMENT PRIMARY KEY,
+                hospital_id INT NOT NULL,
+                sala_id INT NOT NULL,
+                piso VARCHAR(50) NOT NULL,
+                numero_cama VARCHAR(20),
+                disponible BOOLEAN DEFAULT TRUE,
+                paciente_actual INT,
+                ultima_actualizacion TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+                created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+                FOREIGN KEY (hospital_id) REFERENCES hospitales(id),
+                FOREIGN KEY (sala_id) REFERENCES salas(id)
+            )
+        """)
+        print("✓ Tabla 'camas' creada")
+        
+        # Crear tabla refrigeradores
+        cursor.execute("""
+            CREATE TABLE IF NOT EXISTS refrigeradores (
+                id INT AUTO_INCREMENT PRIMARY KEY,
+                hospital_id INT NOT NULL,
+                nombre VARCHAR(100) NOT NULL,
+                temperatura DECIMAL(5, 2) NOT NULL,
+                temperatura_minima DECIMAL(5, 2) DEFAULT 2.0,
+                temperatura_maxima DECIMAL(5, 2) DEFAULT 8.0,
+                estado VARCHAR(50) DEFAULT 'OK',
+                ubicacion VARCHAR(200),
+                ultima_actualizacion TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+                created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+                FOREIGN KEY (hospital_id) REFERENCES hospitales(id)
+            )
+        """)
+        print("✓ Tabla 'refrigeradores' creada")
+        
+        # Crear tabla reportes
+        cursor.execute("""
+            CREATE TABLE IF NOT EXISTS reportes (
+                id INT AUTO_INCREMENT PRIMARY KEY,
+                hospital_id INT NOT NULL,
+                tipo_reporte VARCHAR(50) NOT NULL,
+                fecha_inicio DATE NOT NULL,
+                fecha_fin DATE NOT NULL,
+                url_descarga VARCHAR(500),
+                fecha_generacion TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+                created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+                FOREIGN KEY (hospital_id) REFERENCES hospitales(id)
+            )
+        """)
+        print("✓ Tabla 'reportes' creada")
+        
         conn.commit()
         print("\n✅ Base de datos inicializada correctamente")
         cursor.close()

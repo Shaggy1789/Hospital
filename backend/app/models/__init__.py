@@ -167,3 +167,77 @@ class Estadistica:
             'alertas_totales': self.alertas_totales,
             'created_at': self.created_at.isoformat() if self.created_at else None
         }
+
+class Cama:
+    def __init__(self, hospital_id, sala_id, piso, numero_cama=None, disponible=True, paciente_actual=None, id=None):
+        self.id = id
+        self.hospital_id = hospital_id
+        self.sala_id = sala_id
+        self.piso = piso
+        self.numero_cama = numero_cama
+        self.disponible = disponible
+        self.paciente_actual = paciente_actual
+        self.ultima_actualizacion = datetime.now()
+        self.created_at = datetime.now()
+    
+    def to_dict(self):
+        return {
+            'id': self.id,
+            'hospital_id': self.hospital_id,
+            'sala_id': self.sala_id,
+            'piso': self.piso,
+            'numero_cama': self.numero_cama,
+            'disponible': self.disponible,
+            'paciente_actual': self.paciente_actual,
+            'ultima_actualizacion': self.ultima_actualizacion.isoformat() if self.ultima_actualizacion else None
+        }
+
+class Refrigerador:
+    def __init__(self, hospital_id, nombre, temperatura, estado='OK', 
+                 ubicacion=None, temp_min=2.0, temp_max=8.0, id=None):
+        self.id = id
+        self.hospital_id = hospital_id
+        self.nombre = nombre
+        self.temperatura = temperatura
+        self.temperatura_minima = temp_min
+        self.temperatura_maxima = temp_max
+        self.estado = estado
+        self.ubicacion = ubicacion
+        self.ultima_actualizacion = datetime.now()
+        self.created_at = datetime.now()
+    
+    def to_dict(self):
+        return {
+            'id': self.id,
+            'hospital_id': self.hospital_id,
+            'nombre': self.nombre,
+            'temperatura': self.temperatura,
+            'temperatura_minima': self.temperatura_minima,
+            'temperatura_maxima': self.temperatura_maxima,
+            'estado': self.estado,
+            'ubicacion': self.ubicacion,
+            'ultima_actualizacion': self.ultima_actualizacion.isoformat() if self.ultima_actualizacion else None
+        }
+
+class Reporte:
+    def __init__(self, hospital_id, tipo_reporte, fecha_inicio, fecha_fin, 
+                 url_descarga=None, id=None):
+        self.id = id
+        self.hospital_id = hospital_id
+        self.tipo_reporte = tipo_reporte
+        self.fecha_inicio = fecha_inicio
+        self.fecha_fin = fecha_fin
+        self.url_descarga = url_descarga
+        self.fecha_generacion = datetime.now()
+        self.created_at = datetime.now()
+    
+    def to_dict(self):
+        return {
+            'id': self.id,
+            'hospital_id': self.hospital_id,
+            'tipo_reporte': self.tipo_reporte,
+            'fecha_inicio': self.fecha_inicio.isoformat() if hasattr(self.fecha_inicio, 'isoformat') else str(self.fecha_inicio),
+            'fecha_fin': self.fecha_fin.isoformat() if hasattr(self.fecha_fin, 'isoformat') else str(self.fecha_fin),
+            'url_descarga': self.url_descarga,
+            'fecha_generacion': self.fecha_generacion.isoformat() if self.fecha_generacion else None
+        }
