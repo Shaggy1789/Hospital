@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sistema de Monitoreo Hospitalario</title>
+    <link rel="stylesheet" href="/static/css/style.css">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="container">
+            <h1 class="logo">🏥 Hospital Monitor</h1>
+            <ul class="nav-menu">
+                <li><a href="#dashboard" class="nav-link active">Dashboard</a></li>
+                <li><a href="#hospitales" class="nav-link">Hospitales</a></li>
+                <li><a href="#camaras" class="nav-link">Cámaras</a></li>
+                <li><a href="#sensores" class="nav-link">Sensores</a></li>
+                <li><a href="#alertas" class="nav-link">Alertas</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <main class="main-content">
+        <div class="container">
+            <!-- Dashboard Section -->
+            <section id="dashboard" class="section active">
+                <h2>Dashboard</h2>
+                <div class="dashboard-grid">
+                    <div class="card stat-card">
+                        <h3>Total Hospitales</h3>
+                        <p class="stat-number" id="total-hospitales">0</p>
+                    </div>
+                    <div class="card stat-card">
+                        <h3>Cámaras Disponibles</h3>
+                        <p class="stat-number" id="camaras-disponibles">0</p>
+                    </div>
+                    <div class="card stat-card">
+                        <h3>Alertas Activas</h3>
+                        <p class="stat-number alert" id="alertas-activas">0</p>
+                    </div>
+                    <div class="card stat-card">
+                        <h3>Temperatura Promedio</h3>
+                        <p class="stat-number" id="temp-promedio">0°C</p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Hospitales Section -->
+            <section id="hospitales" class="section">
+                <h2>Gestión de Hospitales</h2>
+                <div class="form-container">
+                    <h3>Crear Nuevo Hospital</h3>
+                    <form id="form-hospital">
+                        <input type="text" id="hospital-nombre" placeholder="Nombre del Hospital" required>
+                        <input type="text" id="hospital-direccion" placeholder="Dirección" required>
+                        <input type="text" id="hospital-telefono" placeholder="Teléfono" required>
+                        <input type="email" id="hospital-email" placeholder="Email" required>
+                        <button type="submit" class="btn btn-primary">Crear Hospital</button>
+                    </form>
+                </div>
+                <div id="hospitales-list" class="list-container">
+                    <h3>Hospitales Registrados</h3>
+                    <div id="hospitales-items"></div>
+                </div>
+            </section>
+
+            <!-- Cámaras Section -->
+            <section id="camaras" class="section">
+                <h2>Gestión de Cámaras</h2>
+                <div class="form-container">
+                    <h3>Crear Nueva Cámara</h3>
+                    <form id="form-camara">
+                        <select id="camara-sala" required>
+                            <option value="">Seleccionar Sala</option>
+                        </select>
+                        <input type="text" id="camara-nombre" placeholder="Nombre de la Cámara" required>
+                        <select id="camara-tipo" required>
+                            <option value="">Seleccionar Tipo</option>
+                            <option value="Estándar">Estándar</option>
+                            <option value="UCI">UCI</option>
+                            <option value="Aislamiento">Aislamiento</option>
+                        </select>
+                        <button type="submit" class="btn btn-primary">Crear Cámara</button>
+                    </form>
+                </div>
+                <div id="camaras-list" class="list-container">
+                    <h3>Cámaras Disponibles</h3>
+                    <div id="camaras-items"></div>
+                </div>
+            </section>
+
+            <!-- Sensores Section -->
+            <section id="sensores" class="section">
+                <h2>Monitoreo de Sensores de Temperatura</h2>
+                <div id="sensores-container">
+                    <div id="sensores-items"></div>
+                </div>
+            </section>
+
+            <!-- Alertas Section -->
+            <section id="alertas" class="section">
+                <h2>Centro de Alertas</h2>
+                <div id="alertas-container">
+                    <div id="alertas-items"></div>
+                </div>
+            </section>
+        </div>
+    </main>
+
+    <footer class="footer">
+        <p>&copy; 2024 Sistema de Monitoreo Hospitalario. Todos los derechos reservados.</p>
+    </footer>
+
+    <script src="/static/js/app.js"></script>
+</body>
+</html>
