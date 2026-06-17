@@ -94,13 +94,33 @@ function switchSection(sectionId) {
 // Cargar Dashboard
 async function loadDashboard() {
     try {
-        const hospitales = await apiClient.get('/hospitals/');
+        const hospitales = await apiClient.get('/sensors/hospitales/lista');
         document.getElementById('total-hospitales').textContent = hospitales ? hospitales.length : 0;
 
-        // Por ahora, valores de demostración
+        let totalCamaras = 0;
+        let camarasDisponibles = 0;
+        let totalAlertas = 0;
+        let temperaturas = [];
+
+        for (const hospital of hospitales) {
+            // Cargar sensores
+            const sensores = await apiClient.get(`/sensors/hospital/${hospital.id}`);
+            if (sensores) {
+                sensores.forEach(sensor => {
+                    temperaturas.push(sensor.temperatura_actual);
+                });
+                totalAlertas += sensores.filter(s => s.alerta_activa).length;
+            }
+        }
+
+        // Calcular promedios
+        const tempPromedio = temperaturas.length > 0 
+            ? (temperaturas.reduce((a, b) => a + b, 0) / temperaturas.length).toFixed(1)
+            : 0;
+
         document.getElementById('camaras-disponibles').textContent = Math.floor(Math.random() * 50);
-        document.getElementById('alertas-activas').textContent = Math.floor(Math.random() * 10);
-        document.getElementById('temp-promedio').textContent = (5 + Math.random() * 3).toFixed(1) + '°C';
+        document.getElementById('alertas-activas').textContent = totalAlertas;
+        document.getElementById('temp-promedio').textContent = tempPromedio + '°C';
     } catch (error) {
         console.error('Error cargando dashboard:', error);
     }
@@ -218,30 +238,204 @@ document.getElementById('form-camara')?.addEventListener('submit', async (e) => 
 // Cargar Sensores
 async function loadSensores() {
     try {
-        const container = document.getElementById('sensores-items');
-        container.innerHTML = `
-            <div class="empty-state">
-                <p>No hay sensores configurados</p>
-                <p>Los sensores se mostrarán aquí cuando se creen en el sistema</p>
-            </div>
-        `;
+        // Obtener lista de hospitales para cargar sensores
+        const hospitales = await apiClient.get('/sensors/hospitales/lista');
+        
+        if (!hospitales || hospitales.length === 0) {
+            document.getElementById('sensores-items').innerHTML = '<p class="empty-state">No hay hospitales disponibles</p>';
+            return;
+        }
+
+        let sensoresHTML = '';
+        
+        for (const hospital of hospitales) {
+            const sensoresHospital = await apiClient.get(`/sensors/hospital/${hospital.id}`);
+            
+            if (!sensoresHospital || sensoresHospital.length === 0) continue;
+
+            sensoresHTML += `
+                <div style="margin-bottom: 2rem;">
+                    <h3 style="color: #2c3e50; margin-bottom: 1rem; border-bottom: 2px solid #3498db; padding-bottom: 0.5rem;">
+                        🏥 ${hospital.nombre}
+                    </h3>
+                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 1.5rem;">
+                        ${sensoresHospital.map(sensor => `
+                            <div class="card" style="border-left: 4px solid ${sensor.alerta_activa ? '#e74c3c' : '#27ae60'};">
+                                <div style="display: flex; justify-content: space-between; align-items: start; margin-bottom: 1rem;">
+                                    <div>
+                                        <h4 style="margin: 0 0 0.5rem 0; color: #2c3e50;">${sensor.nombre}</h4>
+                                        <p style="margin: 0; color: #7f8c8d; font-size: 0.85rem;">📍 ${sensor.ubicacion}</p>
+                                    </div>
+                                    <span style="
+                                        background: ${sensor.alerta_activa ? '#e74c3c' : '#27ae60'};
+                                        color: white;
+                                        padding: 0.25rem 0.75rem;
+                                        border-radius: 20px;
+                                        font-size: 0.75rem;
+                                        font-weight: bold;
+                                    ">${sensor.estado}</span>
+                                </div>
+
+                                <div style="
+                                    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+                                    color: white;
+                                    padding: 1.5rem;
+                                    border-radius: 8px;
+                                    text-align: center;
+                                    margin-bottom: 1rem;
+                                ">
+                                    <p style="margin: 0; font-size: 0.85rem; opacity: 0.9;">Temperatura Actual</p>
+                                    <p style="margin: 0.5rem 0 0 0; font-size: 2rem; font-weight: bold;">
+                                        ${sensor.temperatura_actual}°C
+                                    </p>
+                                </div>
+
+                                <div style="background: #ecf0f1; padding: 1rem; border-radius: 6px; margin-bottom: 1rem;">
+                                    <p style="margin: 0 0 0.5rem 0; font-size: 0.9rem; color: #2c3e50;">
+                                        <strong>Rango:</strong> ${sensor.temperatura_minima}°C - ${sensor.temperatura_maxima}°C
+                                    </p>
+                                    <div style="
+                                        background: white;
+                                        height: 6px;
+                                        border-radius: 3px;
+                                        overflow: hidden;
+                                        position: relative;
+                                    ">
+                                        <div style="
+                                            background: linear-gradient(90deg, #3498db, #27ae60);
+                                            height: 100%;
+                                            width: 60%;
+                                            border-radius: 3px;
+                                        "></div>
+                                    </div>
+                                </div>
+
+                                ${sensor.alerta_activa ? `
+                                    <div style="
+                                        background: #ffebee;
+                                        border: 1px solid #ef5350;
+                                        border-radius: 6px;
+                                        padding: 0.75rem;
+                                        margin-bottom: 1rem;
+                                    ">
+                                        <p style="margin: 0; color: #c62828; font-size: 0.9rem;">
+                                            ⚠️ <strong>¡ALERTA!</strong> Temperatura fuera de rango
+                                        </p>
+                                    </div>
+                                ` : ''}
+
+                                <button class="btn btn-primary" onclick="actualizarTemperaturaSensor(${sensor.id})" style="width: 100%;">
+                                    🔄 Actualizar Lectura
+                                </button>
+                            </div>
+                        `).join('')}
+                    </div>
+                </div>
+            `;
+        }
+
+        document.getElementById('sensores-items').innerHTML = sensoresHTML || '<p class="empty-state">No hay sensores disponibles</p>';
     } catch (error) {
         console.error('Error cargando sensores:', error);
+        document.getElementById('sensores-items').innerHTML = '<p class="empty-state">Error al cargar sensores</p>';
+    }
+}
+
+// Actualizar temperatura de un sensor
+async function actualizarTemperaturaSensor(sensorId) {
+    try {
+        const lectura = await apiClient.get(`/sensors/${sensorId}/lectura`);
+        if (lectura) {
+            alert(`Temperatura actualizada: ${lectura.temperatura}°C`);
+            loadSensores();
+        }
+    } catch (error) {
+        console.error('Error actualizando temperatura:', error);
     }
 }
 
 // Cargar Alertas
 async function loadAlertas() {
     try {
+        const hospitales = await apiClient.get('/sensors/hospitales/lista');
         const container = document.getElementById('alertas-items');
-        container.innerHTML = `
-            <div class="card alert-badge success">
-                ✓ Sistema funcionando correctamente
-            </div>
-            <p class="empty-state">No hay alertas activas en este momento</p>
-        `;
+        
+        if (!hospitales || hospitales.length === 0) {
+            container.innerHTML = '<p class="empty-state">No hay hospitales disponibles</p>';
+            return;
+        }
+
+        let alertasHTML = '';
+        let totalAlertas = 0;
+
+        for (const hospital of hospitales) {
+            const alertas = await apiClient.get(`/sensors/${hospital.id}/alertas`);
+            
+            if (alertas && alertas.length > 0) {
+                totalAlertas += alertas.length;
+                
+                for (const alerta of alertas) {
+                    alertasHTML += `
+                        <div class="card" style="border-left: 4px solid #e74c3c; margin-bottom: 1rem;">
+                            <div style="display: flex; justify-content: space-between; align-items: start;">
+                                <div>
+                                    <h4 style="margin: 0 0 0.5rem 0; color: #2c3e50;">
+                                        ⚠️ ${alerta.tipo.replace(/_/g, ' ')}
+                                    </h4>
+                                    <p style="margin: 0 0 0.5rem 0; color: #7f8c8d;">
+                                        <strong>Hospital:</strong> ${hospital.nombre}
+                                    </p>
+                                    <p style="margin: 0; color: #555;">
+                                        ${alerta.mensaje}
+                                    </p>
+                                </div>
+                                <span style="
+                                    background: #e74c3c;
+                                    color: white;
+                                    padding: 0.5rem 1rem;
+                                    border-radius: 6px;
+                                    font-size: 0.85rem;
+                                    font-weight: bold;
+                                    white-space: nowrap;
+                                    margin-left: 1rem;
+                                ">${alerta.enviada ? 'ENVIADA' : 'PENDIENTE'}</span>
+                            </div>
+                        </div>
+                    `;
+                }
+            }
+        }
+
+        if (alertasHTML === '') {
+            container.innerHTML = `
+                <div style="text-align: center; padding: 2rem;">
+                    <p style="font-size: 3rem; margin: 0;">✅</p>
+                    <p style="color: #27ae60; font-weight: bold; margin: 1rem 0 0 0;">
+                        Sistema funcionando correctamente
+                    </p>
+                    <p style="color: #7f8c8d;">No hay alertas activas en este momento</p>
+                </div>
+            `;
+        } else {
+            alertasHTML = `
+                <div style="
+                    background: #ffebee;
+                    border-left: 4px solid #e74c3c;
+                    padding: 1rem;
+                    border-radius: 6px;
+                    margin-bottom: 1.5rem;
+                ">
+                    <p style="margin: 0; color: #c62828; font-weight: bold;">
+                        🚨 Hay ${totalAlertas} alerta(s) activa(s) en el sistema
+                    </p>
+                </div>
+            ` + alertasHTML;
+            
+            container.innerHTML = alertasHTML;
+        }
     } catch (error) {
         console.error('Error cargando alertas:', error);
+        document.getElementById('alertas-items').innerHTML = '<p class="empty-state">Error al cargar alertas</p>';
     }
 }
 

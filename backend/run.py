@@ -2,12 +2,19 @@
 import os
 from app import create_app
 from config import ServerConfig
+from flask import render_template
 
 # Crear la aplicación Flask
 app = create_app()
 
 @app.route('/')
 def index():
+    """Servir la página principal"""
+    return render_template('index.html')
+
+@app.route('/api')
+def api_info():
+    """Información de la API"""
     return {
         'mensaje': 'Sistema de Monitoreo Hospitalario',
         'version': '1.0.0',
