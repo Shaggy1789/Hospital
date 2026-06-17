@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 # Sistema de Monitoreo Hospitalario
 
 Sistema web para monitoreo y gestión de hospitales, cámaras, sensores de temperatura y alertas.
@@ -197,3 +198,6 @@ Este proyecto está bajo la Licencia MIT.
 ## 📞 Contacto
 
 Para más información o soporte, contacta a: support@hospital.com
+=======
+# Hospital
+>>>>>>> dca3d97b575cb9cfb91eb4849de8ada8a5f89640
