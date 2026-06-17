@@ -1,0 +1,523 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Documentación API - Reportes y Exportación</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: #333;
+            line-height: 1.6;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            overflow: hidden;
+        }
+        
+        header {
+            background: linear-gradient(135deg, #2c3e50 0%, #3498db 100%);
+            color: white;
+            padding: 40px;
+            text-align: center;
+        }
+        
+        header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+        }
+        
+        header p {
+            font-size: 1.1rem;
+            opacity: 0.9;
+        }
+        
+        .content {
+            padding: 40px;
+        }
+        
+        .section {
+            margin-bottom: 50px;
+            border-bottom: 2px solid #ecf0f1;
+            padding-bottom: 30px;
+        }
+        
+        .section:last-child {
+            border-bottom: none;
+        }
+        
+        h2 {
+            color: #2c3e50;
+            font-size: 1.8rem;
+            margin-bottom: 20px;
+            border-left: 5px solid #3498db;
+            padding-left: 15px;
+        }
+        
+        h3 {
+            color: #34495e;
+            font-size: 1.3rem;
+            margin: 20px 0 10px 0;
+        }
+        
+        .endpoint {
+            background: #f8f9fa;
+            border-left: 4px solid #27ae60;
+            padding: 20px;
+            margin: 15px 0;
+            border-radius: 6px;
+        }
+        
+        .method {
+            display: inline-block;
+            padding: 4px 12px;
+            border-radius: 4px;
+            font-weight: bold;
+            font-size: 0.9rem;
+            margin-right: 10px;
+        }
+        
+        .get {
+            background: #3498db;
+            color: white;
+        }
+        
+        .post {
+            background: #27ae60;
+            color: white;
+        }
+        
+        .url {
+            font-family: 'Courier New', monospace;
+            background: #2c3e50;
+            color: #2ecc71;
+            padding: 8px 12px;
+            border-radius: 4px;
+            display: inline-block;
+            margin: 10px 0;
+        }
+        
+        .code-block {
+            background: #2c3e50;
+            color: #ecf0f1;
+            padding: 20px;
+            border-radius: 6px;
+            overflow-x: auto;
+            margin: 15px 0;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9rem;
+        }
+        
+        .code-block h4 {
+            color: #3498db;
+            margin-bottom: 10px;
+        }
+        
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+        }
+        
+        th, td {
+            padding: 12px;
+            text-align: left;
+            border-bottom: 1px solid #bdc3c7;
+        }
+        
+        th {
+            background: #34495e;
+            color: white;
+        }
+        
+        tr:hover {
+            background: #ecf0f1;
+        }
+        
+        .status-200 {
+            color: #27ae60;
+            font-weight: bold;
+        }
+        
+        .status-201 {
+            color: #3498db;
+            font-weight: bold;
+        }
+        
+        .status-400 {
+            color: #e74c3c;
+            font-weight: bold;
+        }
+        
+        .status-500 {
+            color: #c0392b;
+            font-weight: bold;
+        }
+        
+        .feature-box {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 20px;
+            border-radius: 8px;
+            margin: 20px 0;
+        }
+        
+        .feature-box ul {
+            list-style: none;
+            padding-left: 20px;
+        }
+        
+        .feature-box li {
+            margin: 8px 0;
+        }
+        
+        .feature-box li:before {
+            content: "✓ ";
+            color: #2ecc71;
+            font-weight: bold;
+            margin-right: 10px;
+        }
+        
+        footer {
+            background: #2c3e50;
+            color: white;
+            text-align: center;
+            padding: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>📊 Sistema de Reportes y Exportación</h1>
+            <p>API de Hospital Monitor - Documentación Completa</p>
+        </header>
+        
+        <div class="content">
+            <!-- SECCIÓN 1: DESCRIPCIÓN GENERAL -->
+            <div class="section">
+                <h2>📋 Descripción General</h2>
+                <p>El sistema de reportes permite obtener estadísticas detalladas sobre la ocupación de camas, temperatura de refrigeradores y generar reportes exportables en Excel y JSON.</p>
+                
+                <div class="feature-box">
+                    <h3>Características Principales:</h3>
+                    <ul>
+                        <li>Obtener estadísticas de ocupación de camas por hospital</li>
+                        <li>Monitorear temperatura de refrigeradores</li>
+                        <li>Generar reportes en Excel con formato profesional</li>
+                        <li>Descargar datos en formato JSON</li>
+                        <li>Desglose por pisos y áreas</li>
+                        <li>Cálculo automático de porcentajes y promedios</li>
+                    </ul>
+                </div>
+            </div>
+            
+            <!-- SECCIÓN 2: ESTADÍSTICAS DE CAMAS -->
+            <div class="section">
+                <h2>🛏️ Estadísticas de Camas</h2>
+                
+                <div class="endpoint">
+                    <h3><span class="method get">GET</span> Obtener Camas por Hospital</h3>
+                    <div class="url">/api/reportes/camas/&lt;hospital_id&gt;</div>
+                    
+                    <h4>Descripción:</h4>
+                    <p>Obtiene el total de camas, disponibles y el desglose por piso.</p>
+                    
+                    <h4>Respuesta Exitosa:</h4>
+                    <div class="code-block">
+                        <h4>200 OK</h4>
+                        <pre>{
+  "total": 120,
+  "disponibles": 45,
+  "ocupadas": 75,
+  "porcentaje_ocupacion": 62.5,
+  "por_piso": {
+    "urgencias": {
+      "total": 5,
+      "disponibles": 2,
+      "ocupadas": 3
+    },
+    "pediatria": {
+      "total": 8,
+      "disponibles": 3,
+      "ocupadas": 5
+    },
+    "cirugia": {
+      "total": 12,
+      "disponibles": 5,
+      "ocupadas": 7
+    },
+    "medicina_interna": {
+      "total": 20,
+      "disponibles": 10,
+      "ocupadas": 10
+    }
+  },
+  "ultima_actualizacion": "2026-06-17T10:30:00Z"
+}</pre>
+                    </div>
+                    
+                    <h4>Ejemplo de Uso:</h4>
+                    <div class="code-block">
+                        <pre>curl -X GET "http://localhost:5000/api/reportes/camas/1"</pre>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- SECCIÓN 3: TEMPERATURA -->
+            <div class="section">
+                <h2>🌡️ Temperatura de Refrigeradores</h2>
+                
+                <div class="endpoint">
+                    <h3><span class="method get">GET</span> Obtener Temperatura</h3>
+                    <div class="url">/api/reportes/temperatura/&lt;hospital_id&gt;</div>
+                    
+                    <h4>Descripción:</h4>
+                    <p>Obtiene la temperatura actual de todos los refrigeradores.</p>
+                    
+                    <h4>Respuesta Exitosa:</h4>
+                    <div class="code-block">
+                        <h4>200 OK</h4>
+                        <pre>{
+  "refrigeradores": [
+    {
+      "id": 1,
+      "nombre": "Refrigerador Vacunas A",
+      "temperatura": 4.5,
+      "estado": "OK"
+    },
+    {
+      "id": 2,
+      "nombre": "Refrigerador Vacunas B",
+      "temperatura": 7.8,
+      "estado": "ALERTA"
+    },
+    {
+      "id": 3,
+      "nombre": "Congelador Banco Sangre",
+      "temperatura": -25.2,
+      "estado": "OK"
+    }
+  ],
+  "temperatura_promedio": -4.63,
+  "ultima_actualizacion": "2026-06-17T10:30:00Z"
+}</pre>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- SECCIÓN 4: DESCARGAR EXCEL -->
+            <div class="section">
+                <h2>📁 Generar Reporte Excel</h2>
+                
+                <div class="endpoint">
+                    <h3><span class="method post">POST</span> Descargar Reporte</h3>
+                    <div class="url">/api/reportes/descargar</div>
+                    
+                    <h4>Descripción:</h4>
+                    <p>Genera un reporte en Excel con los datos solicitados.</p>
+                    
+                    <h4>Body Request:</h4>
+                    <div class="code-block">
+                        <h4>Ocupación de Camas:</h4>
+                        <pre>{
+  "hospital_id": 1,
+  "tipo_reporte": "ocupacion",
+  "fecha_inicio": "2026-06-01",
+  "fecha_fin": "2026-06-16"
+}</pre>
+                    </div>
+                    
+                    <div class="code-block">
+                        <h4>Temperatura:</h4>
+                        <pre>{
+  "hospital_id": 1,
+  "tipo_reporte": "temperatura",
+  "fecha_inicio": "2026-06-01",
+  "fecha_fin": "2026-06-16"
+}</pre>
+                    </div>
+                    
+                    <h4>Respuesta Exitosa:</h4>
+                    <div class="code-block">
+                        <h4>200 OK - Archivo Excel</h4>
+                        <pre>Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet
+Content-Disposition: attachment; filename="reporte_1_20260617_103000.xlsx"</pre>
+                    </div>
+                    
+                    <h4>Características del Excel:</h4>
+                    <ul>
+                        <li>Encabezados con estilos profesionales</li>
+                        <li>Datos organizados por piso/categoría</li>
+                        <li>Cálculos automáticos</li>
+                        <li>Ancho de columnas ajustado</li>
+                        <li>Bordes y formato aplicados</li>
+                    </ul>
+                </div>
+            </div>
+            
+            <!-- SECCIÓN 5: DESCARGAR JSON -->
+            <div class="section">
+                <h2>📦 Descargar JSON</h2>
+                
+                <div class="endpoint">
+                    <h3><span class="method post">POST</span> Descargar Datos JSON</h3>
+                    <div class="url">/api/reportes/descargar-json</div>
+                    
+                    <h4>Descripción:</h4>
+                    <p>Descarga los datos en formato JSON.</p>
+                    
+                    <h4>Body Request:</h4>
+                    <div class="code-block">
+                        <pre>{
+  "hospital_id": 1
+}</pre>
+                    </div>
+                    
+                    <h4>Respuesta:</h4>
+                    <div class="code-block">
+                        <h4>200 OK</h4>
+                        <pre>{
+  "hospital_id": 1,
+  "fecha_generacion": "2026-06-17T10:30:00Z",
+  "camas": {
+    "total": 45,
+    "disponibles": 35,
+    "ocupadas": 10,
+    "porcentaje_ocupacion": 22.22
+  },
+  "refrigeradores": [
+    {
+      "id": 1,
+      "nombre": "Refrigerador Vacunas A",
+      "temperatura": 4.5,
+      "estado": "OK"
+    }
+  ]
+}</pre>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- SECCIÓN 6: EJEMPLOS PRÁCTICOS -->
+            <div class="section">
+                <h2>💻 Ejemplos Prácticos</h2>
+                
+                <h3>JavaScript/Fetch:</h3>
+                <div class="code-block">
+                    <pre>// Obtener camas
+fetch('/api/reportes/camas/1')
+  .then(r => r.json())
+  .then(data => console.log(data));
+
+// Descargar Excel
+fetch('/api/reportes/descargar', {
+  method: 'POST',
+  headers: {'Content-Type': 'application/json'},
+  body: JSON.stringify({
+    hospital_id: 1,
+    tipo_reporte: 'ocupacion'
+  })
+})
+.then(r => r.blob())
+.then(blob => {
+  const url = window.URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = 'reporte.xlsx';
+  a.click();
+});</pre>
+                </div>
+                
+                <h3>Python/Requests:</h3>
+                <div class="code-block">
+                    <pre>import requests
+
+# Obtener estadísticas
+response = requests.get('http://localhost:5000/api/reportes/camas/1')
+datos = response.json()
+
+# Descargar Excel
+payload = {
+    'hospital_id': 1,
+    'tipo_reporte': 'ocupacion'
+}
+response = requests.post(
+    'http://localhost:5000/api/reportes/descargar',
+    json=payload
+)
+with open('reporte.xlsx', 'wb') as f:
+    f.write(response.content)</pre>
+                </div>
+            </div>
+            
+            <!-- SECCIÓN 7: CÓDIGOS DE ESTADO -->
+            <div class="section">
+                <h2>⚠️ Códigos de Estado HTTP</h2>
+                
+                <table>
+                    <tr>
+                        <th>Código</th>
+                        <th>Significado</th>
+                        <th>Descripción</th>
+                    </tr>
+                    <tr>
+                        <td><span class="status-200">200 OK</span></td>
+                        <td>Solicitud exitosa</td>
+                        <td>Los datos fueron recuperados correctamente</td>
+                    </tr>
+                    <tr>
+                        <td><span class="status-201">201 Created</span></td>
+                        <td>Creado</td>
+                        <td>El recurso fue creado exitosamente</td>
+                    </tr>
+                    <tr>
+                        <td><span class="status-400">400 Bad Request</span></td>
+                        <td>Solicitud Inválida</td>
+                        <td>Los parámetros enviados son inválidos</td>
+                    </tr>
+                    <tr>
+                        <td><span class="status-500">500 Internal Server Error</span></td>
+                        <td>Error del Servidor</td>
+                        <td>Ocurrió un error al procesar la solicitud</td>
+                    </tr>
+                </table>
+            </div>
+            
+            <!-- SECCIÓN 8: NOTAS IMPORTANTES -->
+            <div class="section">
+                <h2>ℹ️ Notas Importantes</h2>
+                
+                <div class="feature-box">
+                    <h3>Puntos Clave:</h3>
+                    <ul>
+                        <li>Los datos mostrados son simulados para desarrollo</li>
+                        <li>Los reportes se generan en tiempo real</li>
+                        <li>Los archivos Excel incluyen formato profesional</li>
+                        <li>Es compatible con todos los navegadores modernos</li>
+                        <li>Los endpoints están protegidos contra errores</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        
+        <footer>
+            <p>© 2024 Sistema de Monitoreo Hospitalario. Todos los derechos reservados.</p>
+            <p>Versión: 1.0.0 | API Documentation v1</p>
+        </footer>
+    </div>
+</body>
+</html>
